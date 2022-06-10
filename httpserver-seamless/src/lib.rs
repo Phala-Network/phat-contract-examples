@@ -11,7 +11,6 @@ async fn handle(request: Request<Body>) -> Result<Response<Body>, Infallible> {
 #[sidevm::main]
 async fn main() {
     sidevm::logger::Logger::with_max_level(log::Level::Trace).init();
-    sidevm::ocall::enable_ocall_trace(true).unwrap();
 
     let make_svc = hyper::service::make_service_fn(|_conn| async {
         Ok::<_, Infallible>(hyper::service::service_fn(handle))
