@@ -1,10 +1,14 @@
-use std::convert::Infallible;
 use log::{error, info};
+use std::convert::Infallible;
 
 use hyper::{Body, Request, Response};
 
 use routerify::prelude::*;
-use routerify::{Middleware, Router, RequestInfo, RouterService};
+use routerify::Router;
+
+use service::RouterService;
+
+mod service;
 
 // Define an app state to share it across the route handlers and middlewares.
 struct State(u64);
@@ -55,7 +59,7 @@ async fn main() {
 
     let listener = sidevm::net::TcpListener::bind(address).await.unwrap();
 
-    let server = hyper::Server::builder(listener)
+    let server = hyper::Server::builder(listener.into_addr_incoming())
         .executor(sidevm::exec::HyperExecutor)
         .serve(service);
     if let Err(e) = server.await {
