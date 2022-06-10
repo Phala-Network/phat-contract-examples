@@ -11,7 +11,7 @@ crate-type = ["cdylib"]
 [dependencies]
 log = "0.4.16"
 once_cell = "1.10.0"
-sidevm = { version = "0.1", package = "pink-sidevm", path = "/home/kvin/codes/chain/phala/phala-blockchain/crates/pink/sidevm/sidevm" }
+sidevm = { version = "0.1", package = "pink-sidevm" }
 tokio = { version = "1", features = ["macros"] }
 hyper = { version = "0.14.18", features = ["server", "http1", "stream"] }
 seamless = "0.10.0"
@@ -20,4 +20,4 @@ futures = "0.3"
 tokio-util = { version = "0.3.1", features= ["compat"] }
 bytes = "1.1.0"
 anyhow = "1"
- 
+

@@ -36,7 +36,7 @@ async fn main() {
     });
 
     let address = "127.0.0.1:1999";
-    info!("Listening on {}", address);
+    info!("Listening on https://{}", address);
 
     let listener = sidevm::net::TcpListener::bind_tls(address, TlsServerConfig::V0 {
         cert: CERT.to_string(),
