@@ -1,0 +1,24 @@
+[workspace]
+
+[package]
+edition = "2021"
+name = "sidevm-httpserver"
+version = "0.1.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+hyper = { version = "0.14.18", features = ["server", "http1"] }
+log = "0.4.16"
+once_cell = "1.10.0"
+sidevm = { version = "0.1", package = "pink-sidevm", path = "../../../phala-blockchain/crates/pink/sidevm/sidevm", features = [
+    "routerify",
+] }
+tokio = { version = "1", features = ["macros"] }
+routerify = { version = "3.0.0", default-features = false, features = [
+    "hyper-http1",
+] }
+
+[patch.crates-io]
+routerify = { path = "../../routerify" }
