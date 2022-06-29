@@ -45,7 +45,7 @@ fn create_api() -> Api {
 
 #[sidevm::main]
 async fn main() {
-    sidevm::logger::Logger::with_max_level(log::Level::Debug).init();
+    sidevm::logger::Logger::with_max_level(log::LevelFilter::Debug).init();
 
     let make_svc = hyper::service::make_service_fn(|_conn| async {
         let api = Arc::new(SeamlessApi(create_api()));
