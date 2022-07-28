@@ -12,8 +12,8 @@ mod start_sidevm {
     impl Contract {
         #[ink(constructor)]
         pub fn default() -> Self {
-            let code = &include_bytes!("./sideprog.wasm")[..];
-            pink::start_sidevm(code.into(), true);
+            let hash = *include_bytes!("./sideprog.wasm.hash");
+            pink::start_sidevm(hash, true);
             Self {}
         }
         #[ink(message)]
