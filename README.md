@@ -48,7 +48,7 @@ $ yarn --version
 
 ## Build
 
-Clone this repo and go to any subdirectory then `make`.
+Clone this repo and go to any subdirectory then `make`, or `cargo contract build --release` if there isn't a Makefile.
 
 For example:
 
@@ -56,4 +56,6 @@ For example:
 git clone https://github.com/Phala-Network/fat-contract-examples.git
 cd fat-contract-examples/mqtt-broker
 make
+cd ../logging
+cargo contract build --release
 ```

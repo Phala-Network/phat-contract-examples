@@ -1,5 +1,3 @@
-[workspace]
-
 [package]
 name = "mqtt-broker"
 version = "0.1.0"
