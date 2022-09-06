@@ -1,10 +1,14 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+extern crate alloc;
+
 use ink_lang as ink;
 
 #[ink::contract]
 mod web3 {
-    use pink_web3::api::{Accounts, Eth};
+    use alloc::string::String;
+
+    use pink_web3::api::{Accounts, Eth, Namespace};
     use pink_web3::keys::pink::KeyPair;
     use pink_web3::transports::{resolve_ready, PinkHttp};
     use pink_web3::types::TransactionParameters;
@@ -15,11 +19,11 @@ mod web3 {
     }
 
     impl Web3 {
-        fn eth(&self) -> Eth<PinkHttp<1024>> {
+        fn eth(&self) -> Eth<PinkHttp> {
             Eth::new(PinkHttp::new(self.url.clone()))
         }
 
-        fn accounts(&self) -> Accounts<PinkHttp<1024>> {
+        fn accounts(&self) -> Accounts<PinkHttp> {
             Accounts::new(PinkHttp::new(self.url.clone()))
         }
 
