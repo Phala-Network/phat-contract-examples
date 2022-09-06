@@ -1,5 +1,4 @@
 use log::info;
-use pink_sidevm as sidevm;
 
 use futures::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
 

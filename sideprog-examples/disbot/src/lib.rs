@@ -2,7 +2,6 @@ use serenity::async_trait;
 use serenity::model::channel::Message;
 use serenity::model::gateway::Ready;
 use serenity::prelude::*;
-use pink_sidevm as sidevm;
 use log::info;
 
 struct Handler;

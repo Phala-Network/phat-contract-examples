@@ -7,7 +7,6 @@ use chrono::{TimeZone, Utc};
 use hyper::{Body, Request, Response};
 use log::{error, info};
 
-use pink_sidevm as sidevm;
 use sidevm::env::messages::SystemMessage;
 
 #[derive(Clone)]
