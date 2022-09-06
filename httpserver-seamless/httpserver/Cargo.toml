@@ -11,7 +11,7 @@ crate-type = ["cdylib"]
 [dependencies]
 log = "0.4.16"
 once_cell = "1.10.0"
-sidevm = { version = "0.1", package = "pink-sidevm" }
+sidevm = "0.1"
 tokio = { version = "1", features = ["macros"] }
 hyper = { version = "0.14.18", features = ["server", "http1", "stream"] }
 seamless = "0.10.0"

@@ -11,5 +11,5 @@ crate-type = ["cdylib"]
 
 [dependencies]
 log = "0.4.16"
-pink-sidevm = "0.1"
+sidevm = "0.1"
 futures = "0.3"

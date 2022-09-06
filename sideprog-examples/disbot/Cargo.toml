@@ -7,7 +7,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-pink-sidevm = "0.1"
+sidevm = "0.1"
 log = "0.4"
 
 [dependencies.serenity]

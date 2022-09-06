@@ -1,6 +1,5 @@
 use log::info;
 
-use pink_sidevm as sidevm;
 use sidevm::{logger::Logger, ocall};
 
 #[sidevm::main]
