@@ -6,12 +6,6 @@ use pink_extension as pink;
 mod contract {
     use super::pink;
 
-    use pink::logger::{Level, Logger};
-
-    static LOGGER: Logger = Logger::with_max_level(Level::Info);
-
-    pink::register_logger!(&LOGGER);
-
     #[ink(storage)]
     pub struct Contract {}
 

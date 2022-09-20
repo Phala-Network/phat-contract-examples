@@ -15,6 +15,10 @@ ${SIDE_WASM}:
 
 .PHONY: clean
 clean:
-	rm -rf sideprog.wasm
+	rm -rf sideprog.wasm sideprog.wasm.hash
 	rm -rf target/ sideprog/target/
+	rm -rf e2e/node_modules/
 
+.PHONY: test
+test: target/ink/start_sidevm.contract
+	cd e2e && yarn && yarn test
