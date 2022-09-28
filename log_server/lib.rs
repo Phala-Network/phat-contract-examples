@@ -13,7 +13,7 @@ mod contract {
         #[ink(constructor)]
         pub fn default() -> Self {
             let code_hash = *include_bytes!("./sideprog.wasm.hash");
-            pink::start_sidevm(code_hash, true);
+            pink::start_sidevm(code_hash).expect("Failed to start sidevm");
             Self {}
         }
         #[pink(on_block_end)]
