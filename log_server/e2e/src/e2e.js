@@ -3,7 +3,7 @@ const { ContractPromise } = require('@polkadot/api-contract');
 const Phala = require('@phala/sdk');
 
 const { TxQueue, checkUntil, hex } = require('./utils');
-const { loadContract, deployContract, setLogHanlder } = require('./common');
+const { loadContractDir, loadContractFile, deployContract, setLogHanlder, uploadSystemCode } = require('./common');
 
 async function getWorkerPubkey(api) {
     const workers = await api.query.phalaRegistry.workers.entries();
@@ -35,8 +35,9 @@ async function setupGatekeeper(api, txpool, pair, worker) {
 }
 
 async function deployCluster(api, txqueue, sudoer, owner, worker, defaultCluster = '0x0000000000000000000000000000000000000000000000000000000000000000') {
-    if ((await api.query.phalaRegistry.clusterKeys(defaultCluster)).isSome) {
-        return defaultCluster;
+    const clusterInfo = await api.query.phalaFatContracts.clusters(defaultCluster);
+    if (clusterInfo.isSome) {
+        return { clusterId: defaultCluster, systemContract: clusterInfo.unwrap().systemContract.toHex() };
     }
     console.log('Cluster: creating');
     // crete contract cluster and wait for the setup
@@ -51,16 +52,23 @@ async function deployCluster(api, txqueue, sudoer, owner, worker, defaultCluster
     const ev = events[1].event;
     console.assert(ev.section == 'phalaFatContracts' && ev.method == 'ClusterCreated');
     const clusterId = ev.data[0].toString();
+    const systemContract = ev.data[1].toString();
     console.log('Cluster: created', clusterId)
     await checkUntil(
         async () => (await api.query.phalaRegistry.clusterKeys(clusterId)).isSome,
         4 * 6000
     );
-    return clusterId;
+    await checkUntil(
+        async () => (await api.query.phalaRegistry.contractKeys(systemContract)).isSome,
+        4 * 6000
+    );
+    return { clusterId, systemContract };
 }
 
 async function main() {
-    const contract = loadContract('log_server');
+    const contractSystem = loadContractFile('../../pink_system.contract');
+    const contractSidevmop = loadContractDir('../../sidevmop');
+    const contract = loadContractDir('..');
 
     // connect to the chain
     const wsProvider = new WsProvider('ws://localhost:19944');
@@ -91,9 +99,31 @@ async function main() {
 
     // basic phala network setup
     await setupGatekeeper(api, txqueue, alice, worker);
-    const clusterId = await deployCluster(api, txqueue, alice, alice.address, worker);
 
-    // contracts
+    // Upload the pink-system wasm to the chain. It is required to create a cluster.
+    await uploadSystemCode(api, txqueue, alice, contractSystem.wasm);
+
+    const { clusterId, systemContract } = await deployCluster(api, txqueue, alice, alice.address, worker);
+
+    // deploy the driver contracts
+    const driverAddress = await deployContract(api, txqueue, bob, contractSidevmop, clusterId);
+
+    const newApi = await api.clone().isReady;
+    const system = new ContractPromise(
+        await Phala.create({ api: newApi, baseURL: pruntimeURL, contractId: systemContract }),
+        contractSystem.metadata,
+        systemContract
+    );
+    // setup driver permissions
+    await txqueue.submit(
+        system.tx["system::setDriver"]({}, "SidevmOperation", driverAddress),
+        alice
+    );
+    await txqueue.submit(
+        system.tx["system::grantAdmin"]({}, driverAddress),
+        alice
+    );
+    // deploy our contract
     await deployContract(api, txqueue, bob, contract, clusterId);
 
     // set the contract as the log handler for the cluster

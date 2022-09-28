@@ -1,21 +1,29 @@
 const fs = require('fs');
 const crypto = require('crypto');
 const { checkUntil, checkUntilEq, hex } = require('./utils');
-const { assert } = require('console');
 
-function loadContract(name) {
-    const wasmPath = `../target/ink/${name}.wasm`;
-    const sideprogPath = `../sideprog.wasm`;
-    const metadataPath = `../target/ink/metadata.json`;
-    const wasm = hex(fs.readFileSync(wasmPath, 'hex'));
+function loadContractFile(contractFile) {
+    const metadata = JSON.parse(fs.readFileSync(contractFile));
+    const constructor = metadata.V3.spec.constructors.find(c => c.label == 'default').selector;
+    const name = metadata.contract.name;
+    const wasm = metadata.source.wasm;
+    return { wasm, metadata, constructor, name };
+}
+
+function loadContractDir(path) {
+    const metadataPath = `${path}/target/ink/metadata.json`;
     const metadata = JSON.parse(fs.readFileSync(metadataPath));
+    const name = metadata.contract.name;
+    const wasmPath = `${path}/target/ink/${name}.wasm`;
+    const sideprogPath = `${path}/sideprog.wasm`;
+    const wasm = hex(fs.readFileSync(wasmPath, 'hex'));
     const constructor = metadata.V3.spec.constructors.find(c => c.label == 'default').selector;
     const sideprog = fs.existsSync(sideprogPath) ? hex(fs.readFileSync(sideprogPath, 'hex')) : null;
-    return { wasm, metadata, constructor, sideprog };
+    return { wasm, metadata, constructor, sideprog, name };
 }
 
 async function deployContract(api, txqueue, pair, contract, clusterId) {
-    console.log('Contracts: uploading');
+    console.log(`Contracts: uploading ${contract.name}`);
     // upload the contract 
     const { events: deployEvents } = await txqueue.submit(
         api.tx.utility.batchAll(
@@ -51,7 +59,8 @@ async function deployContract(api, txqueue, pair, contract, clusterId) {
         4 * 6000
     );
     console.log('Contracts:', contract.address, 'key ready');
-    console.log('Contracts: deployed');
+    console.log(`Contracts: ${contract.name} deployed`);
+    return contract.address;
 }
 
 async function setLogHanlder(api, txqueue, pair, clusterId, contract) {
@@ -69,8 +78,19 @@ async function setLogHanlder(api, txqueue, pair, clusterId, contract) {
     console.log('Cluster: Log hander set');
 }
 
+async function uploadSystemCode(api, txqueue, pair, wasm) {
+    console.log(`Uploading system code`);
+    await txqueue.submit(
+        api.tx.sudo.sudo(api.tx.phalaFatContracts.setPinkSystemCode(hex(wasm))),
+        pair
+    );
+    console.log(`Uploaded system code`);
+}
+
 module.exports = {
-    loadContract,
+    loadContractFile,
+    loadContractDir,
     deployContract,
     setLogHanlder,
+    uploadSystemCode,
 }
