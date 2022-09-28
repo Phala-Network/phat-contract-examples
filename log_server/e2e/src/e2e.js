@@ -127,7 +127,7 @@ async function main() {
     await deployContract(api, txqueue, bob, contract, clusterId);
 
     // set the contract as the log handler for the cluster
-    await setLogHanlder(api, txqueue, alice, clusterId, contract.address);
+    await setLogHanlder(api, txqueue, alice, clusterId, system, contract.address);
 }
 
 main().then(process.exit).catch(err => console.error('Crashed', err)).finally(() => process.exit(-1));

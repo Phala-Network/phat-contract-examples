@@ -1,5 +1,6 @@
 const fs = require('fs');
 const crypto = require('crypto');
+const Phala = require('@phala/sdk');
 const { checkUntil, checkUntilEq, hex } = require('./utils');
 
 function loadContractFile(contractFile) {
@@ -63,10 +64,15 @@ async function deployContract(api, txqueue, pair, contract, clusterId) {
     return contract.address;
 }
 
-async function setLogHanlder(api, txqueue, pair, clusterId, contract) {
+async function setLogHanlder(api, txqueue, pair, clusterId, system, contract) {
     const { events } = await txqueue.submit(
         api.tx.phalaFatContracts.clusterSetLogHandler(clusterId, contract),
         pair
+    );
+
+    await txqueue.submit(
+        system.tx['system::setDriver']({}, "PinkLogger", contract),
+        pair,
     );
 
     await checkUntilEq(async () =>
@@ -75,6 +81,16 @@ async function setLogHanlder(api, txqueue, pair, clusterId, contract) {
             .length,
         1
     );
+
+    const certAlice = await Phala.signCertificate({ api, pair });
+    await checkUntilEq(
+        contract,
+        async () => {
+            const { output } = await system.query['system::getDriver'](certAlice, {}, "PinkLogger");
+            return output.toHex();
+        }
+    );
+
     console.log('Cluster: Log hander set');
 }
 
