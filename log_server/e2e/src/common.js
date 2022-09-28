@@ -84,11 +84,11 @@ async function setLogHanlder(api, txqueue, pair, clusterId, system, contract) {
 
     const certAlice = await Phala.signCertificate({ api, pair });
     await checkUntilEq(
-        contract,
         async () => {
             const { output } = await system.query['system::getDriver'](certAlice, {}, "PinkLogger");
             return output.toHex();
-        }
+        },
+        contract
     );
 
     console.log('Cluster: Log hander set');
