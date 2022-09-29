@@ -65,21 +65,9 @@ async function deployContract(api, txqueue, pair, contract, clusterId) {
 }
 
 async function setLogHanlder(api, txqueue, pair, clusterId, system, contract) {
-    const { events } = await txqueue.submit(
-        api.tx.phalaFatContracts.clusterSetLogHandler(clusterId, contract),
-        pair
-    );
-
     await txqueue.submit(
         system.tx['system::setDriver']({}, "PinkLogger", contract),
         pair,
-    );
-
-    await checkUntilEq(async () =>
-        events
-            .filter(ev => ev.event.section == 'phalaFatContracts' && ev.event.method == 'ClusterSetLogReceiver')
-            .length,
-        1
     );
 
     const certAlice = await Phala.signCertificate({ api, pair });
