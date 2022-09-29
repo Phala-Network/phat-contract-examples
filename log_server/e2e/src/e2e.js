@@ -2,7 +2,7 @@ const { ApiPromise, WsProvider, Keyring } = require('@polkadot/api');
 const { ContractPromise } = require('@polkadot/api-contract');
 const Phala = require('@phala/sdk');
 
-const { TxQueue, checkUntil, hex } = require('./utils');
+const { sleep, TxQueue, checkUntil, hex } = require('./utils');
 const { loadContractDir, loadContractFile, deployContract, setLogHanlder, uploadSystemCode } = require('./common');
 
 async function getWorkerPubkey(api) {
@@ -128,6 +128,27 @@ async function main() {
 
     // set the contract as the log handler for the cluster
     await setLogHanlder(api, txqueue, alice, clusterId, system, contract.address);
+
+    const log_server = new ContractPromise(
+        await Phala.create({ api: await api.clone().isReady, baseURL: pruntimeURL, contractId: contract.address }),
+        contract.metadata,
+        contract.address
+    );
+    const certAlice = await Phala.signCertificate({ api, pair: alice });
+    console.log("Starting log server");
+    await checkUntil(
+        async () => {
+            const { output } = await log_server.query.start(certAlice, {});
+            console.log("output=", output);
+            return output && output.valueOf();
+        },
+        4 * 6000
+    );
+    console.log("Log server started");
+    await sleep(1000);
+    console.log("Sending test log");
+    const { output } = await log_server.query.logTest(certAlice, {}, "Hello world");
+    console.log("Test log sent, rv=", output.valueOf());
 }
 
 main().then(process.exit).catch(err => console.error('Crashed', err)).finally(() => process.exit(-1));

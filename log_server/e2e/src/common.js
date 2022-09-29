@@ -76,7 +76,8 @@ async function setLogHanlder(api, txqueue, pair, clusterId, system, contract) {
             const { output } = await system.query['system::getDriver'](certAlice, {}, "PinkLogger");
             return output.toHex();
         },
-        contract
+        contract,
+        4 * 6000
     );
 
     console.log('Cluster: Log hander set');
