@@ -152,12 +152,34 @@ async function main() {
 
     }
 
-    for (var i = 0; i < 10000; i++) {
-        console.log("Deploying contract " + i);
-        let contract = loadContractFile(`../target/ink/test.${i}.contract`);
-        await deployContract(api, txqueue, bob, contract, clusterId, true);
-        let info = await prpc.getInfo({});
-        console.log(JSON.stringify(info));
+    if (false) {
+        for (var i = 0; i < 10000; i++) {
+            console.log("Deploying contract " + i);
+            let contract = loadContractFile(`../target/ink/test.${i}.contract`);
+            await deployContract(api, txqueue, bob, contract, clusterId, true);
+            let info = await prpc.getInfo({});
+            console.log(JSON.stringify(info));
+        }
+    }
+
+    const contracts = JSON.parse(fs.readFileSync('contracts.json'));
+    for (const i = 0; i < 100; i++) {
+        const contractId = contracts[i];
+        const test = new ContractPromise(
+            await Phala.create({ api: await api.clone().isReady, baseURL: pruntimeURL, contractId }),
+            contract.metadata,
+            contractId
+        );
+        const certAlice = await Phala.signCertificate({ api, pair: alice });
+        console.log(`starting ${i} ${contractId}`);
+        await checkUntil(
+            async () => {
+                const { output } = await test.query.start(certAlice, {});
+                console.log("output=", output);
+                return output && output.valueOf();
+            },
+            4 * 6000
+        );
     }
 }
 
