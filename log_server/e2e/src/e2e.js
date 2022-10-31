@@ -1,5 +1,6 @@
 const { ApiPromise, WsProvider, Keyring } = require('@polkadot/api');
 const { ContractPromise } = require('@polkadot/api-contract');
+const { hexToString, hexToU8a } = require('@polkadot/util')
 const Phala = require('@phala/sdk');
 
 const { sleep, TxQueue, checkUntil, hex } = require('./utils');
@@ -152,6 +153,15 @@ async function main() {
     console.log("Sending test log");
     const { output } = await log_server.query.logTest(certAlice, {}, "Hello world");
     console.log("Test log sent, rv=", output.valueOf());
+    
+    const { sidevmQuery } = await Phala.create({ api: await api.clone().isReady, baseURL: pruntimeURL, contractId });
+    const raw = await sidevmQuery('', certAlice);
+    console.log(raw)
+    
+    const resp = api.createType('InkResponse', raw);
+    const result = resp.result.toHuman()
+    const text = hexToString(result.Ok.InkMessageReturn)
+    console.log(text)
 }
 
 main().then(process.exit).catch(err => console.error('Crashed', err)).finally(() => process.exit(-1));
