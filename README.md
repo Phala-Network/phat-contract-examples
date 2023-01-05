@@ -1,6 +1,6 @@
-# Fat Contract Examples
+# Phat Contract Examples
 
-This repo provides examples that demonstrate Phala fat contract features.
+This repo provides examples that demonstrate Phala phat contract features.
 
 
 ## Environment Preparation
@@ -53,8 +53,8 @@ Clone this repo and go to any subdirectory then `make`, or `cargo contract build
 For example:
 
 ```bash
-git clone https://github.com/Phala-Network/fat-contract-examples.git
-cd fat-contract-examples/mqtt-broker
+git clone https://github.com/Phala-Network/phat-contract-examples.git
+cd phat-contract-examples/mqtt-broker
 make
 cd ../logging
 cargo contract build --release
