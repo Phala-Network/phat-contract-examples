@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@phala/sdk": "^0.3.2",
+    "@phala/sdk": "^0.3.4-beta.0",
     "@polkadot/api": "^9.4.1",
     "@polkadot/api-contract": "^9.4.1",
     "dotenv": "^16.0.1"

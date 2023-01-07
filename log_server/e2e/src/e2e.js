@@ -1,5 +1,6 @@
 const { ApiPromise, WsProvider, Keyring } = require('@polkadot/api');
 const { ContractPromise } = require('@polkadot/api-contract');
+const { hexToString, hexToU8a } = require('@polkadot/util')
 const Phala = require('@phala/sdk');
 
 const { sleep, TxQueue, checkUntil, hex } = require('./utils');
@@ -100,6 +101,9 @@ async function main() {
     // basic phala network setup
     await setupGatekeeper(api, txqueue, alice, worker);
 
+    // Add endpoint to phalaRegistry so you can get endpoints via `phalaRegistry.endpoints`.
+    await prpc.addEndpoint({ encodedEndpointType: [1], endpoint: pruntimeURL })
+
     // Upload the pink-system wasm to the chain. It is required to create a cluster.
     await uploadSystemCode(api, txqueue, alice, contractSystem.wasm);
 
@@ -110,7 +114,7 @@ async function main() {
 
     const newApi = await api.clone().isReady;
     const system = new ContractPromise(
-        await Phala.create({ api: newApi, baseURL: pruntimeURL, contractId: systemContract }),
+        (await Phala.create({ api: newApi, baseURL: pruntimeURL, contractId: systemContract })).api,
         contractSystem.metadata,
         systemContract
     );
@@ -124,15 +128,15 @@ async function main() {
         alice
     );
     // deploy our contract
-    await deployContract(api, txqueue, bob, contract, clusterId);
+    const contractId = await deployContract(api, txqueue, bob, contract, clusterId);
 
     // set the contract as the log handler for the cluster
     await setLogHanlder(api, txqueue, alice, clusterId, system, contract.address);
 
     const log_server = new ContractPromise(
-        await Phala.create({ api: await api.clone().isReady, baseURL: pruntimeURL, contractId: contract.address }),
+        (await Phala.create({ api: await api.clone().isReady, baseURL: pruntimeURL, contractId })).api,
         contract.metadata,
-        contract.address
+        contractId
     );
     const certAlice = await Phala.signCertificate({ api, pair: alice });
     console.log("Starting log server");
@@ -149,6 +153,15 @@ async function main() {
     console.log("Sending test log");
     const { output } = await log_server.query.logTest(certAlice, {}, "Hello world");
     console.log("Test log sent, rv=", output.valueOf());
+    
+    const { sidevmQuery } = await Phala.create({ api: await api.clone().isReady, baseURL: pruntimeURL, contractId });
+    const raw = await sidevmQuery('', certAlice);
+    console.log(raw)
+    
+    const resp = api.createType('InkResponse', raw);
+    const result = resp.result.toHuman()
+    const text = hexToString(result.Ok.InkMessageReturn)
+    console.log(text)
 }
 
 main().then(process.exit).catch(err => console.error('Crashed', err)).finally(() => process.exit(-1));
