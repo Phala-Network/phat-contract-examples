@@ -13,7 +13,9 @@ async fn main() {
 
     info!("Connecting to {host}:{port}");
 
-    let stream = sidevm::net::TcpStream::connect(host, port, port == 443).await.unwrap();
+    let stream = sidevm::net::TcpStream::connect(host, port, port == 443)
+        .await
+        .unwrap();
     let mut stream = BufReader::new(stream);
     info!("Sending request");
     stream

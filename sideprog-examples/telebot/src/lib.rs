@@ -1,6 +1,6 @@
 use futures::StreamExt;
-use telegram_bot::*;
 use log::info;
+use telegram_bot::*;
 
 #[sidevm::main]
 async fn main() {

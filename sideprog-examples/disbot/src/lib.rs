@@ -1,9 +1,8 @@
+use log::{error, info};
 use serenity::async_trait;
 use serenity::model::channel::Message;
 use serenity::model::gateway::Ready;
 use serenity::prelude::*;
-use log::{error, info};
-
 
 struct Handler;
 
@@ -41,7 +40,7 @@ impl EventHandler for Handler {
 async fn main() {
     sidevm::logger::Logger::with_max_level(log::LevelFilter::Trace).init();
     info!("Starting up...");
-    
+
     let token = "<Put your token here>";
     // Set gateway intents, which decides what events the bot will be notified about
     let intents = GatewayIntents::GUILD_MESSAGES
@@ -51,8 +50,10 @@ async fn main() {
     // Create a new instance of the Client, logging in as a bot. This will
     // automatically prepend your bot token with "Bot ", which is a requirement
     // by Discord for bot users.
-    let mut client =
-        Client::builder(&token, intents).event_handler(Handler).await.expect("Err creating client");
+    let mut client = Client::builder(&token, intents)
+        .event_handler(Handler)
+        .await
+        .expect("Err creating client");
 
     // Finally, start a single shard, and start listening to events.
     //

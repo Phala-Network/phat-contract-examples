@@ -1,8 +1,8 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 extern crate alloc;
 
-use pink_extension as pink;
 use pink::PinkEnvironment;
+use pink_extension as pink;
 
 #[pink::contract(env = PinkEnvironment)]
 mod proxy {
@@ -15,7 +15,7 @@ mod proxy {
         #[ink(constructor)]
         pub fn default() -> Self {
             let my_address = ink::env::account_id::<PinkEnvironment>();
-            pink::set_hook(pink::HookPoint::OnBlockEnd,  my_address, 0x01, 1000000000);
+            pink::set_hook(pink::HookPoint::OnBlockEnd, my_address, 0x01, 1000000000);
             Proxy {}
         }
 

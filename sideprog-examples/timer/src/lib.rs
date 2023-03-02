@@ -1,6 +1,5 @@
 use futures::{
-    channel::mpsc::channel,
-    stream::futures_unordered::FuturesUnordered, SinkExt, StreamExt,
+    channel::mpsc::channel, stream::futures_unordered::FuturesUnordered, SinkExt, StreamExt,
 };
 use log::info;
 
@@ -41,7 +40,7 @@ async fn main() {
                 info!("All tasks finished");
                 break;
             }
-            Some(tid) => info!("Task {} finished", tid+1),
+            Some(tid) => info!("Task {} finished", tid + 1),
         }
     }
 }
