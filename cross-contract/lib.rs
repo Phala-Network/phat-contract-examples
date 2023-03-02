@@ -1,7 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use ink_lang as ink;
-
 #[ink::contract]
 mod cross {
     use flip::FlipRef;
@@ -24,8 +22,7 @@ mod cross {
                 .endowment(100000)
                 .salt_bytes(&[0x00])
                 .code_hash(hash)
-                .instantiate()
-                .expect("failed at instantiating the `OtherContract` contract..");
+                .instantiate();
             Self { flip }
         }
 

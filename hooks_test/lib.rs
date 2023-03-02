@@ -14,12 +14,14 @@ mod proxy {
     impl Proxy {
         #[ink(constructor)]
         pub fn default() -> Self {
+            let my_address = ink::env::account_id::<PinkEnvironment>();
+            pink::set_hook(pink::HookPoint::OnBlockEnd,  my_address, 0x01, 1000000000);
             Proxy {}
         }
 
-        #[pink(on_block_end)]
+        #[ink(message, selector = 0x01)]
         pub fn on_block_end(&self) {
-            pink::push_message(b"foo".to_vec(), b"/bar".to_vec());
+            pink::info!("on block end");
         }
     }
 }

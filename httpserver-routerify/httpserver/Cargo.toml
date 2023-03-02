@@ -2,7 +2,7 @@
 
 [package]
 edition = "2021"
-name = "sidevm-httpserver"
+name = "httpserver"
 version = "0.1.0"
 
 [lib]

@@ -2,8 +2,6 @@
 
 extern crate alloc;
 
-use ink_lang as ink;
-
 #[ink::contract]
 mod web3 {
     use alloc::string::String;
@@ -54,8 +52,6 @@ mod web3 {
     #[cfg(test)]
     mod tests {
         use super::*;
-
-        use ink_lang as ink;
 
         #[ink::test]
         fn it_works() {
