@@ -38,3 +38,8 @@ clean: ${CONTRACTS:%=clean-%}
 
 clean-%:
 	make clean -C $* -f ../contract.mk
+
+fmt: ${CONTRACTS:%=fmt-%}
+
+fmt-%:
+	make fmt -C $* -f ../contract.mk

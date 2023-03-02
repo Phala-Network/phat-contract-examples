@@ -13,4 +13,7 @@ $(PROG): always-rerun
 clean:
 	cargo clean
 
+fmt:
+	cargo fmt
+
 always-rerun:

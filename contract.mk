@@ -54,11 +54,19 @@ ifneq (, $(SIDE_PROG_DIR))
 	rm -rf ${SIDE_PROG_DIR}/target
 endif
 
+fmt:
+	cargo fmt
+ifneq (, $(SIDE_PROG_DIR))
+	cd ${SIDE_PROG_DIR} && cargo fmt
+endif
+
 else
 install:
 	make install
 clean:
 	make clean
+fmt:
+	make fmt
 endif
 
 always-rerun:
