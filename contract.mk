@@ -7,14 +7,11 @@ SIDE_PROG_DIR=$(shell toml get -r Cargo.toml package.metadata.sideprog.path)
 endif
 ifneq (, $(SIDE_PROG_DIR))
 SIDE_PROG=$(shell toml get -r Cargo.toml package.metadata.sideprog.name | tr '-' '_')
-SIDE_PROG?=$(shell toml get -r $(SIDE_PROG_DIR)/Cargo.toml package.name | tr '-' '_')
+ifeq (, $(SIDE_PROG))
+SIDE_PROG=$(shell toml get -r $(SIDE_PROG_DIR)/Cargo.toml package.name | tr '-' '_')
+endif
 SIDE_WASM=${SIDE_PROG_DIR}/target/${TARGET}/release/${SIDE_PROG}.wasm
 endif
-
-$(info CONTRACT_NAME=${CONTRACT_NAME})
-$(info SIDE_PROG_DIR=${SIDE_PROG_DIR})
-$(info SIDE_PROG=${SIDE_PROG})
-$(info SIDE_WASM=${SIDE_WASM})
 
 CONTRACT_OUTPUT=target/ink/${CONTRACT_NAME}.contract
 
