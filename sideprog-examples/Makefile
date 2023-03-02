@@ -1,5 +1,4 @@
 PROGRAMS = \
-	disbot \
 	httpclient \
 	httpserver \
 	recv_messages \
@@ -8,6 +7,7 @@ PROGRAMS = \
 	tcpserver \
 	telebot \
 	timer \
+	disbot \
 
 .PHONY: install clean
 
@@ -15,7 +15,7 @@ install: $(PROGRAMS:%=install-%)
 
 
 install-%:
-	make install -C $* -f ../build.mk
+	make install -C $* -f ../build.mk PREFIX=`realpath $(PREFIX)`/sideprogs
 
 clean: $(PROGRAMS:%=clean-%)
 

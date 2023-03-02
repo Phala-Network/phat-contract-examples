@@ -4,20 +4,20 @@
 
 CONTRACTS := \
 	sideprog-examples \
-	# start_sidevm \
-	# httpserver-hyper-tls \
-	# httpserver-routerify \
-	# httpserver-seamless \
-	# mqtt-broker \
-	# cross-contract \
-	# flip \
-	# hooks_test \
-	# http_client \
-	# logging \
-	# signing \
-	# unittests \
-	# use_cache \
-	# web3 \
+	start_sidevm \
+	httpserver-hyper-tls \
+	httpserver-routerify \
+	httpserver-seamless \
+	mqtt-broker \
+	cross-contract \
+	flip \
+	hooks_test \
+	http_client \
+	logging \
+	signing \
+	unittests \
+	use_cache \
+	web3 \
 
 PREFIX ?= $(shell pwd)/dist
 export PREFIX
