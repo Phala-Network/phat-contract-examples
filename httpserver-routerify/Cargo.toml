@@ -1,28 +1,27 @@
 [package]
-name = "simple-httpserver"
+name = "httpserver-routerify"
 version = "0.1.0"
 authors = ["[your_name] <[your_email]>"]
 edition = "2018"
 resolver = "2"
 
+[package.metadata.sideprog]
+path = "httpserver"
+
 [dependencies]
-ink_primitives = { version = "3.1.0", default-features = false }
-ink_metadata = { version = "3.1.0", default-features = false, features = ["derive"], optional = true }
-ink_env = { version = "3.1.0", default-features = false }
-ink_storage = { version = "3.1.0", default-features = false }
-ink_lang = { version = "3.1.0", default-features = false }
+ink = { version = "4", default-features = false }
 
 scale = { package = "parity-scale-codec", version = "3.0", default-features = false, features = ["derive"] }
 scale-info = { version = "2.0", default-features = false, features = ["derive"], optional = true }
 
-pink-extension = { version = "0.1.0", default-features = false }
+pink-extension = { version = "0.4", default-features = false }
 
 [build-dependencies]
 run_shell = "0.1"
 sp-core = "6"
 
 [lib]
-name = "httpserver"
+name = "httpserver_routerify"
 path = "lib.rs"
 crate-type = [
     # Used for normal contract Wasm blobs.
@@ -32,10 +31,7 @@ crate-type = [
 [features]
 default = ["std"]
 std = [
-    "ink_metadata/std",
-    "ink_env/std",
-    "ink_storage/std",
-    "ink_primitives/std",
+    "ink/std",
     "scale/std",
     "scale-info/std",
 ]

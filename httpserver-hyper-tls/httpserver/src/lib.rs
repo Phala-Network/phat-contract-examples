@@ -1,5 +1,5 @@
-use std::convert::Infallible;
 use log::{error, info};
+use std::convert::Infallible;
 
 use hyper::{Body, Request, Response};
 use sidevm::env::tls::TlsServerConfig;
@@ -38,10 +38,15 @@ async fn main() {
     let address = "127.0.0.1:1999";
     info!("Listening on https://{}", address);
 
-    let listener = sidevm::net::TcpListener::bind_tls(address, TlsServerConfig::V0 {
-        cert: CERT.to_string(),
-        key: KEY.to_string(),
-    }).await.unwrap();
+    let listener = sidevm::net::TcpListener::bind_tls(
+        address,
+        TlsServerConfig::V0 {
+            cert: CERT.to_string(),
+            key: KEY.to_string(),
+        },
+    )
+    .await
+    .unwrap();
 
     let server = hyper::Server::builder(listener)
         .executor(sidevm::exec::HyperExecutor)

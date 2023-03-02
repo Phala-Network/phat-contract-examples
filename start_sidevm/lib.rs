@@ -5,6 +5,7 @@ use pink_extension as pink;
 #[pink::contract]
 mod start_sidevm {
     use super::pink;
+    use pink::PinkEnvironment;
     use scale::Encode;
 
     #[ink(storage)]
@@ -13,9 +14,15 @@ mod start_sidevm {
     impl Contract {
         #[ink(constructor)]
         pub fn default() -> Self {
+            pink::set_hook(
+                pink::HookPoint::OnBlockEnd,
+                ink::env::account_id::<PinkEnvironment>(),
+                0x01,
+                1000000000,
+            );
             Self {}
         }
-        #[pink(on_block_end)]
+        #[ink(message, selector = 0x01)]
         pub fn on_block_end(&self) {
             let number = self.env().block_number().encode();
             pink::ext().cache_set(b"block_number", &number).unwrap();
@@ -26,7 +33,7 @@ mod start_sidevm {
         pub fn start_sidevm(&self) {
             // TODO: check permission if needed
             let hash = *include_bytes!("./sideprog.wasm.hash");
-            pink::start_sidevm(hash, true);
+            pink::start_sidevm(hash).expect("start sidevm failed");
         }
 
         #[ink(message)]

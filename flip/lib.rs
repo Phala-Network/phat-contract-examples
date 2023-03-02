@@ -1,6 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use ink_lang as ink;
 pub use flip::{Flip, FlipRef};
 
 #[ink::contract]
@@ -57,9 +56,6 @@ mod flip {
     mod tests {
         /// Imports all the definitions from the outer scope so we can use them here.
         use super::*;
-
-        /// Imports `ink_lang` so we can use `#[ink::test]`.
-        use ink_lang as ink;
 
         /// We test if the default constructor does its job.
         #[ink::test]

@@ -3,14 +3,13 @@ extern crate alloc;
 
 use pink_extension as pink;
 
-
 #[pink::contract(env=PinkEnvironment)]
-#[pink(inner=ink_lang::contract)]
+#[pink(inner=ink::contract)]
 mod http_client {
     use super::pink;
-    use pink::{PinkEnvironment, http_post, http_get};
-    use alloc::vec::Vec;
     use alloc::string::String;
+    use alloc::vec::Vec;
+    use pink::{http_get, http_post, PinkEnvironment};
 
     #[ink(storage)]
     pub struct HttpClient {}
@@ -43,7 +42,6 @@ mod http_client {
     #[cfg(test)]
     mod tests {
         use super::*;
-        use ink_lang as ink;
         #[ink::test]
         fn get_ip_works() {
             use pink_extension::chain_extension::{mock, HttpResponse};

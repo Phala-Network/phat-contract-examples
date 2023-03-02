@@ -3,12 +3,11 @@ extern crate alloc;
 
 use pink_extension as pink;
 
-
 #[pink::contract(env=PinkEnvironment)]
 mod signing {
     use super::pink;
-    use pink::PinkEnvironment;
     use pink::chain_extension::signing as sig;
+    use pink::PinkEnvironment;
 
     #[ink(storage)]
     pub struct Signing {}
@@ -37,7 +36,7 @@ mod signing {
     #[cfg(test)]
     mod tests {
         use super::*;
-        use ink_lang as ink;
+
         #[ink::test]
         fn it_works() {
             pink_extension_runtime::mock_ext::mock_all_ext();

@@ -30,7 +30,7 @@ mod use_cache {
     #[cfg(test)]
     mod tests {
         use super::*;
-        use ink_lang as ink;
+
         #[ink::test]
         fn it_works() {
             use pink_extension::chain_extension::mock;

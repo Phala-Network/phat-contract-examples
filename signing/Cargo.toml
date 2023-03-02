@@ -6,19 +6,15 @@ edition = "2021"
 rust-version = "1.56.1"
 
 [dependencies]
-ink_primitives = { version = "3.3.1", default-features = false }
-ink_metadata = { version = "3.3.1", default-features = false, features = ["derive"], optional = true }
-ink_env = { version = "3.3.1", default-features = false }
-ink_storage = { version = "3.3.1", default-features = false }
-ink_lang = { version = "3.3.1", default-features = false }
+ink = { version = "4", default-features = false }
 
 scale = { package = "parity-scale-codec", version = "3.1", default-features = false, features = ["derive"] }
 scale-info = { version = "2.1", default-features = false, features = ["derive"], optional = true }
 
-pink-extension = { version = "0.1", default-features = false }
+pink-extension = { version = "0.4", default-features = false }
 
 [dev-dependencies]
-pink-extension-runtime = "0.1"
+pink-extension-runtime = "0.4"
 
 [lib]
 name = "signing"
@@ -31,10 +27,7 @@ crate-type = [
 [features]
 default = ["std"]
 std = [
-    "ink_metadata/std",
-    "ink_env/std",
-    "ink_storage/std",
-    "ink_primitives/std",
+    "ink/std",
     "scale/std",
     "scale-info/std",
     "pink-extension/std",

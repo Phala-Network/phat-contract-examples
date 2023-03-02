@@ -15,29 +15,24 @@ The following toolchains are needed:
     - Install rustup, rustup is the "package manager" of different versions of Rust compilers: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
     - This will install `rustup` and `cargo`
 - Ink! Contract toolchain
-    - Install [binaryen](https://github.com/WebAssembly/binaryen) with
-        - Homebrew for macOS: `brew install binaryen`
-        - Apt for Ubuntu: `sudo apt install binaryen`
-        - or download the [release](https://github.com/WebAssembly/binaryen/releases/tag/version_105) and put it under your `$PATH`
-    - Install dylint-link toolchain: `cargo install cargo-dylint dylint-link`
     - Install contract toolchain: `cargo install cargo-contract --force`
-    - For macOS M1 chip users: `rustup component add rust-src --toolchain nightly-aarch64-apple-darwin`
 - Install frontend toolchain
     - Node.js (>=v16), follow the [official tutorial](https://nodejs.org/en/download/package-manager/)
     - Yarn (v1): `npm install --global yarn`
+- Install toml-cli
+    - `cargo install toml-cli`
 
 Check your installation with
 
 ```bash
 $ rustup toolchain list
 # stable-x86_64-unknown-linux-gnu (default)
-# nightly-x86_64-unknown-linux-gnu
 
 $ cargo --version
-# cargo 1.58.0 (f01b232bc 2022-01-19)
+# cargo 1.67.1 (8ecd4f20a 2023-01-10)
 
-$ cargo contract --version
-# cargo-contract 0.17.0-unknown-x86_64-linux-gnu
+$ cargo-contract --version
+# cargo-contract 2.0.0-unknown-x86_64-unknown-linux-gnu
 
 $ node --version
 # v17.5.0
@@ -48,14 +43,10 @@ $ yarn --version
 
 ## Build
 
-Clone this repo and go to any subdirectory then `make`, or `cargo contract build --release` if there isn't a Makefile.
-
-For example:
+Run make in the root directory to build all the examples:
 
 ```bash
 git clone https://github.com/Phala-Network/phat-contract-examples.git
-cd phat-contract-examples/mqtt-broker
 make
-cd ../logging
-cargo contract build --release
+ls dist/
 ```

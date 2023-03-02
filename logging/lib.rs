@@ -28,8 +28,6 @@ mod logging {
     mod tests {
         use super::*;
 
-        use ink_lang as ink;
-
         #[ink::test]
         fn log_works() {
             env_logger::init();

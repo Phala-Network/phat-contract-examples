@@ -15,7 +15,7 @@ mod start_sidevm {
         #[ink(constructor)]
         pub fn default() -> Self {
             Self {
-                owner: Self::env().caller()
+                owner: Self::env().caller(),
             }
         }
 

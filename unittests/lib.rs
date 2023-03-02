@@ -24,8 +24,6 @@ mod unittests {
     mod tests {
         use super::*;
 
-        use ink_lang as ink;
-
         #[ink::test]
         fn getrandom_works() {
             pink_extension_runtime::mock_ext::mock_all_ext();

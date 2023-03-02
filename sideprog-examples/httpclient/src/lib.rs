@@ -1,8 +1,8 @@
 use std::io::Read;
 
-use sidevm::net::HttpConnector;
 use hyper::body::Buf;
 use log::info;
+use sidevm::net::HttpConnector;
 
 #[sidevm::main]
 async fn main() {
