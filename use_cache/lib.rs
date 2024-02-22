@@ -1,11 +1,8 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+#![cfg_attr(not(feature = "std"), no_std, no_main)]
 extern crate alloc;
-
-use pink_extension as pink;
 
 #[pink::contract(env=PinkEnvironment)]
 mod use_cache {
-    use super::pink;
     use pink::chain_extension::pink_extension_instance as ext;
     use pink::PinkEnvironment;
 
@@ -25,6 +22,14 @@ mod use_cache {
             assert_eq!(ext().cache_remove(b"key"), Some(b"value".to_vec()));
             assert_eq!(ext().cache_get(b"key"), None);
         }
+
+        #[ink(message)]
+        pub fn test_tx(&mut self) {
+            assert!(ext().cache_set(b"key", b"value").is_ok());
+            ext().cache_set_expiration(b"key", 10);
+            assert_eq!(ext().cache_get(b"key"), None);
+            assert_eq!(ext().cache_remove(b"key"), None);
+        }
     }
 
     #[cfg(test)]
@@ -33,7 +38,7 @@ mod use_cache {
 
         #[ink::test]
         fn it_works() {
-            use pink_extension::chain_extension::mock;
+            use pink::chain_extension::mock;
             use std::{cell::RefCell, collections::HashMap, rc::Rc};
 
             let storage: Rc<RefCell<HashMap<Vec<u8>, Vec<u8>>>> = Default::default();

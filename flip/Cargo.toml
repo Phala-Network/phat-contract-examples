@@ -12,13 +12,7 @@ scale = { package = "parity-scale-codec", version = "3.1", default-features = fa
 scale-info = { version = "2.1", default-features = false, features = ["derive"], optional = true }
 
 [lib]
-name = "flip"
 path = "lib.rs"
-crate-type = [
-    # Used for normal contract Wasm blobs.
-    "cdylib",
-    "rlib",
-]
 
 [features]
 default = ["std"]

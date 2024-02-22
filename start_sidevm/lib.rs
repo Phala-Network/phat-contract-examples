@@ -1,12 +1,9 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+#![cfg_attr(not(feature = "std"), no_std, no_main)]
 
-use pink_extension as pink;
-
-#[pink::contract]
+#[ink::contract]
 mod start_sidevm {
-    use super::pink;
-    use pink::PinkEnvironment;
     use scale::Encode;
+    use pink::PinkEnvironment;
 
     #[ink(storage)]
     pub struct Contract {}
