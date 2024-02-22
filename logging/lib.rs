@@ -1,13 +1,8 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+#![cfg_attr(not(feature = "std"), no_std, no_main)]
 extern crate alloc;
 
-use pink_extension as pink;
-
-#[pink::contract(env=PinkEnvironment)]
+#[ink::contract]
 mod logging {
-    use super::pink;
-    use pink::PinkEnvironment;
-
     #[ink(storage)]
     pub struct Logging {}
 
@@ -31,7 +26,7 @@ mod logging {
         #[ink::test]
         fn log_works() {
             env_logger::init();
-            pink_extension_runtime::mock_ext::mock_all_ext();
+            pink_chain_extension::mock_ext::mock_all_ext();
 
             Logging::default().test()
         }

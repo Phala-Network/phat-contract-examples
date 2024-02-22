@@ -1,4 +1,4 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+#![cfg_attr(not(feature = "std"), no_std, no_main)]
 
 extern crate alloc;
 
@@ -55,14 +55,14 @@ mod web3 {
 
         #[ink::test]
         fn it_works() {
-            pink_extension_runtime::mock_ext::mock_all_ext();
+            pink_chain_extension::mock_ext::mock_all_ext();
             let web3 = Web3::default();
             assert_eq!(web3.mining(), true);
         }
 
         #[ink::test]
         fn tx_works() {
-            pink_extension_runtime::mock_ext::mock_all_ext();
+            pink_chain_extension::mock_ext::mock_all_ext();
             let web3 = Web3::default();
             _ = web3.tx();
         }

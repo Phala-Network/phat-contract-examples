@@ -13,15 +13,10 @@ scale-info = { version = "2", default-features = false, features = ["derive"], o
 pink-web3 = { version = "0.20", default-features = false, features = ["pink", "signing"] }
 
 [dev-dependencies]
-pink-extension-runtime = "0.4"
+pink-chain-extension = "0.1.0-dev.0"
 
 [lib]
-name = "web3"
 path = "lib.rs"
-crate-type = [
-	# Used for normal contract Wasm blobs.
-	"cdylib",
-]
 
 [features]
 default = ["std"]

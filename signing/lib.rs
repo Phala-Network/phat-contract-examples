@@ -1,11 +1,8 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+#![cfg_attr(not(feature = "std"), no_std, no_main)]
 extern crate alloc;
-
-use pink_extension as pink;
 
 #[pink::contract(env=PinkEnvironment)]
 mod signing {
-    use super::pink;
     use pink::chain_extension::signing as sig;
     use pink::PinkEnvironment;
 
@@ -39,7 +36,7 @@ mod signing {
 
         #[ink::test]
         fn it_works() {
-            pink_extension_runtime::mock_ext::mock_all_ext();
+            pink_chain_extension::mock_ext::mock_all_ext();
 
             let contract = Signing::default();
             contract.test();

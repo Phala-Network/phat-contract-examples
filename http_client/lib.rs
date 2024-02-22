@@ -1,15 +1,11 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+#![cfg_attr(not(feature = "std"), no_std, no_main)]
 extern crate alloc;
 
-use pink_extension as pink;
-
-#[pink::contract(env=PinkEnvironment)]
-#[pink(inner=ink::contract)]
+#[ink::contract]
 mod http_client {
-    use super::pink;
     use alloc::string::String;
     use alloc::vec::Vec;
-    use pink::{http_get, http_post, PinkEnvironment};
+    use pink::{http_get, http_post};
 
     #[ink(storage)]
     pub struct HttpClient {}
@@ -44,7 +40,7 @@ mod http_client {
         use super::*;
         #[ink::test]
         fn get_ip_works() {
-            use pink_extension::chain_extension::{mock, HttpResponse};
+            use pink::chain_extension::{mock, HttpResponse};
 
             mock::mock_http_request(|request| {
                 if request.url == "https://ip.kvin.wang" {

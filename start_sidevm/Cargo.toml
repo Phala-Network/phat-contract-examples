@@ -10,11 +10,9 @@ path = "sideprog"
 
 [dependencies]
 ink = { version = "4", default-features = false }
-
+pink = { version = "0.1.0-dev.0", default-features = false }
 scale = { package = "parity-scale-codec", version = "3.1", default-features = false, features = ["derive"] }
 scale-info = { version = "2.1", default-features = false, features = ["derive"], optional = true }
-
-pink-extension = { version = "0.4", default-features = false }
 
 [build-dependencies]
 run_shell = "0.1"
@@ -23,15 +21,12 @@ sp-core = "6.0.0"
 [lib]
 name = "start_sidevm"
 path = "lib.rs"
-crate-type = [
-    # Used for normal contract Wasm blobs.
-    "cdylib",
-]
 
 [features]
 default = ["std"]
 std = [
     "ink/std",
+    "pink/std",
     "scale/std",
     "scale-info/std",
 ]

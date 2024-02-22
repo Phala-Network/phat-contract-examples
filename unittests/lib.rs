@@ -1,12 +1,7 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+#![cfg_attr(not(feature = "std"), no_std, no_main)]
 
-use pink_extension as pink;
-
-#[pink::contract(env=PinkEnvironment)]
+#[ink::contract]
 mod unittests {
-    use super::pink;
-    use pink::PinkEnvironment;
-
     #[ink(storage)]
     pub struct Unittests {}
 
@@ -22,11 +17,9 @@ mod unittests {
 
     #[cfg(test)]
     mod tests {
-        use super::*;
-
         #[ink::test]
         fn getrandom_works() {
-            pink_extension_runtime::mock_ext::mock_all_ext();
+            pink_chain_extension::mock_ext::mock_all_ext();
 
             let bytes = pink::ext().getrandom(3);
             assert_eq!(bytes.len(), 3);

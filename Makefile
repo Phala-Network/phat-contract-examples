@@ -9,9 +9,7 @@ CONTRACTS := \
 	httpserver-routerify \
 	httpserver-seamless \
 	mqtt-broker \
-	cross-contract \
 	flip \
-	hooks_test \
 	http_client \
 	logging \
 	signing \
